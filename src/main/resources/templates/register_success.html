@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registration Success</title>
+    <link th:href="@{/css/main.css}" rel="stylesheet"/>
+</head>
+<body>
+<div id="form">
+    <h2>Registration Succeeded!</h2>
+    <span>Full name:</span><span th:text="${user.name}"></span><br/>
+    <span>E-mail:</span><span th:text="${user.email}"></span><br/>
+    <span>Password:</span><span th:text="${user.password}"></span><br/>
+    <span>Mood:</span><span th:text="${user.mood}"></span><br/>
+    <span>Profession:</span><span th:text="${user.profession}"></span><br/>
+    <span>Human?</span><span th:text="${user.human}"></span><br/>
+    <span>Note:</span><span th:text="${user.note}"></span><br/>
+
+    <form>
+        <button onclick="goBack()">Go Back</button>
+        <script>
+            function goBack() {
+                window.history.back();
+            }
+        </script>
+    </form>
+    <form action="#" th:action="@{/users}" method="get">
+        <button type="submit">View All Users</button>
+    </form>
+</div>
+</body>
+</html>

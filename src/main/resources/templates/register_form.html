@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User Registration</title>
+    <link th:href="@{/css/main.css}" rel="stylesheet" />
+</head>
+<body>
+<div id="form">
+    <div id="title">
+        <h1>User Registration</h1>
+    </div>
+    <form action="#" th:action="@{/register}" method="post" th:object="${user}">
+        <label>Full name:</label>
+        <input type="text" th:field="*{name}" />
+        <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}">name error</span><br/>
+
+        <label>E-mail:</label>
+        <input type="text" th:field="*{email}" />
+        <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}">email error</span><br/>
+
+        <label>Password:</label>
+        <input type="password" th:field="*{password}" />
+        <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}">password error</span><br/>
+
+        <label>Birthday:</label>
+        <input type="date" placeholder="MM/DD/YYYY" pattern="(^((0[1-9]|1[012]|[1-9])[- /.](0[1-9]|[12][0-9]|3[01]|
+        [1-9])[- /.](19|20)\d\d|(19|20)\d\d[- /.](0[1-9]|1[012]|[1-9])[- /.](0[1-9]|[12][0-9]|3[01]|[1-9]))$)" required
+               th:field="*{birthday}"/>
+
+        <span th:if="${#fields.hasErrors('birthday')}" th:errors="*{birthday}">birthday error</span><br/>
+
+        <label>Mood:</label>
+        <input type="radio" th:field="*{mood}" value="Happy" />Happy
+        <input type="radio" th:field="*{mood}" value="Sad" />Sad
+        <span th:if="${#fields.hasErrors('mood')}" th:errors="*{mood}">mood error</span><br/>
+
+
+        <label>Profession:</label>
+        <select th:field="*{profession}">
+            <option th:each="p : ${listProfession}" th:value="${p}" th:text="${p}"></option>
+        </select>
+        <br/>
+
+        <label>Human?</label>
+        <input type="checkbox" th:field="*{human}" /><br/>
+
+        <label>Note:</label>
+        <textarea rows="5" cols="25" th:field="*{note}"></textarea>
+        <br/>
+
+        <button type="submit">Register</button>
+    </form>
+</div>
+</body>
+</html>
