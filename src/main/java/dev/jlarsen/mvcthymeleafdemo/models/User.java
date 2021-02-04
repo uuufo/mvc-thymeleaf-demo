@@ -1,6 +1,7 @@
 package dev.jlarsen.mvcthymeleafdemo.models;
 
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -20,7 +21,8 @@ public class User {
     @Email(message = "Please enter a valid e-mail address.")
     private String email;
 
-    @Size(min = 8, max = 25, message="Must be between 8 and 25 characters.")
+    @Column(length = 60)
+    //@Size(min = 8, max = 25, message="Must be between 8 and 25 characters.")
     private String password;
 
     private String note;

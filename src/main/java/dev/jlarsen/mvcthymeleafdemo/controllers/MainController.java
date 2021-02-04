@@ -1,8 +1,10 @@
 package dev.jlarsen.mvcthymeleafdemo.controllers;
 
+import dev.jlarsen.mvcthymeleafdemo.exceptions.UserExistsException;
 import dev.jlarsen.mvcthymeleafdemo.models.User;
 import dev.jlarsen.mvcthymeleafdemo.repositories.UserRepository;
 import dev.jlarsen.mvcthymeleafdemo.services.MainService;
+import dev.jlarsen.mvcthymeleafdemo.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,7 +21,15 @@ public class MainController {
     MainService mainService;
 
     @Autowired
+    UserService userService;
+
+    @Autowired
     UserRepository userRepository;
+
+//    @GetMapping("/login")
+//    public String loginUser() {
+//        return "login";
+//    }
 
     @GetMapping("/register")
     public String showForm(Model model) {
@@ -29,8 +39,8 @@ public class MainController {
 
     @GetMapping("/users")
     public String getUsers(Model model) {
-        model.addAttribute("users", mainService.getUsers());
-        return "users";
+        model.addAttribute("users", userService.getUsers());
+        return "test/users";
     }
 
     @GetMapping("/test")
@@ -41,12 +51,12 @@ public class MainController {
     }
 
     @PostMapping("/register")
-    public String submitForm(@Valid @ModelAttribute("user") User user, BindingResult bindingResult, Model model) {
+    public String submitForm(@Valid @ModelAttribute("user") User user, BindingResult bindingResult, Model model) throws UserExistsException {
         if (bindingResult.hasErrors()) {
             mainService.populateModel(model);
             return "register_form";
         } else {
-            userRepository.save(user);
+            userService.registerNewUserAccount(user);
             return "register_success";
         }
     }
