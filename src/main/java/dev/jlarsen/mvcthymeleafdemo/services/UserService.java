@@ -51,4 +51,24 @@ public class UserService {
         return userRepository.findByEmail(email) != null;
     }
 
+    public Model populateModel(Model model) {
+        if (!model.containsAttribute("user")) {
+            User user = new User();
+            model.addAttribute("user", user);
+        }
+        List<String> listProfession = Arrays.asList("Developer", "Tester", "Architect");
+        model.addAttribute("listProfession", listProfession);
+        return model;
+    }
+
+    public ModelAndView populateModel(ModelAndView modelAndView) {
+        if (!modelAndView.getModelMap().containsAttribute("user")) {
+            User user = new User();
+            modelAndView.addObject("user", user);
+        }
+        List<String> listProfession = Arrays.asList("Developer", "Tester", "Architect");
+        modelAndView.addObject("listProfession", listProfession);
+        return modelAndView;
+    }
+
 }
