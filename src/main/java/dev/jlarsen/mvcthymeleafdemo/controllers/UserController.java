@@ -2,7 +2,6 @@ package dev.jlarsen.mvcthymeleafdemo.controllers;
 
 import dev.jlarsen.mvcthymeleafdemo.exceptions.UserExistsException;
 import dev.jlarsen.mvcthymeleafdemo.models.User;
-import dev.jlarsen.mvcthymeleafdemo.repositories.UserRepository;
 import dev.jlarsen.mvcthymeleafdemo.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,13 +18,10 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    @Autowired
-    UserRepository userRepository;
-
-//    @GetMapping("/login")
-//    public String loginUser() {
-//        return "login";
-//    }
+    @GetMapping("/login")
+    public String loginUser() {
+        return "login";
+    }
 
     @GetMapping("/register")
     public String showForm(Model model) {
@@ -36,7 +32,7 @@ public class UserController {
     @GetMapping("/users")
     public String getUsers(Model model) {
         model.addAttribute("users", userService.getUsers());
-        return "test/users";
+        return "users";
     }
 
     @GetMapping("/test")

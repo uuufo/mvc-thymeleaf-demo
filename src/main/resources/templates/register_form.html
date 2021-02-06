@@ -1,60 +1,123 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>User Registration</title>
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<!--    <link th:href="@{/css/main.css}" rel="stylesheet" />-->
+    <title>Register New User</title>
+    <div th:replace="fragments :: header"/>
 </head>
 <body>
-<div id="form">
-    <div id="title">
+<div th:replace="fragments :: navigation"/>
+<div class="container">
+
+    <div class="bg-light p-5 rounded-lg m-3">
         <h1>User Registration</h1>
+
+        <form class="col-10" action="#" th:action="@{/register}" method="post" th:object="${user}">
+            <div class="row align-items-center">
+                <div class="col-2">
+                    <label for="inputName" class="col-form-label">Full Name:</label>
+                </div>
+                <div class="col-auto">
+                    <input type="text" id="inputName" class="form-control" aria-describedby="nameHelp"
+                           th:field="*{name}" required>
+                </div>
+                <div class="col-auto">
+                    <span class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">
+                        name error</span><br/>
+                    <span id="nameHelp" class="form-text">First & Last</span>
+                </div>
+            </div>
+
+            <div class="row align-items-center">
+                <div class="col-2">
+                    <label for="inputEmail" class="col-form-label">Email Address:</label>
+                </div>
+                <div class="col-auto">
+                    <input type="email" id="inputEmail" class="form-control" aria-describedby="emailHelp"
+                           th:field="*{email}" required>
+                </div>
+                <div class="col-auto">
+                    <span class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">
+                        email error</span><br/>
+                    <span id="emailHelp" class="form-text">This will be your username</span>
+                </div>
+            </div>
+
+            <div class="row align-items-center">
+                <div class="col-2">
+                    <label for="inputPassword" class="col-form-label">Password:</label>
+                </div>
+                <div class="col-auto">
+                    <input type="password" id="inputPassword" class="form-control" aria-describedby="passHelp"
+                           th:field="*{password}" required>
+                </div>
+                <div class="col-auto">
+                    <span class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">
+                        password error</span><br/>
+                    <span id="passHelp" class="form-text">Must be between 8 and 20 characters</span>
+                </div>
+            </div>
+
+            <div class="row align-items-center">
+                <div class="col-2">
+                    <label for="inputBirthday" class="col-form-label">Birthday:</label>
+                </div>
+                <div class="col-auto">
+                    <input type="date" id="inputBirthday" class="form-control" aria-describedby="bdHelp"
+                           placeholder="MM/DD/YYYY" pattern="(^((0[1-9]|1[012]|[1-9])[- /.](0[1-9]|[12][0-9]|3[01]|
+                                        [1-9])[- /.](19|20)\d\d|(19|20)\d\d[- /.](0[1-9]|1[012]|[1-9])[- /.]
+                                            (0[1-9]|[12][0-9]|3[01]|[1-9]))$)" required th:field="*{birthday}">
+                </div>
+                <div class="col-auto">
+                    <span class="text-danger" th:if="${#fields.hasErrors('birthday')}" th:errors="*{birthday}">birthday error</span><br/>
+                    <span id="bdHelp" class="form-text">Please lie about it</span>
+                </div>
+            </div>
+
+            <div class="row align-items-center">
+                <div class="col-2">
+                    <label for="happyRadio" class="col-form-label">Mood:</label>
+                </div>
+                <div class="col-auto">
+                    <input class="form-check-input" type="radio" name="moodRadio" id="happyRadio" th:field="*{mood}"
+                           value="Happy" required>
+                    <label class="form-check-label" for="happyRadio">
+                        Happy
+                    </label>
+                </div>
+                <div class="col-auto">
+                    <input class="form-check-input" type="radio" name="moodRadio" id="sadRadio" th:field="*{mood}"
+                           value="Sad">
+                    <label class="form-check-label" for="sadRadio">
+                        Sad
+                    </label>
+                </div>
+            </div>
+
+            <div class="row align-items-center">
+                <div class="col-2">
+                    <label for="proList" class="col-form-label">Profession:</label>
+                </div>
+                <div class="col-auto">
+                    <select class="form-select" th:field="*{profession}" id="proList">
+                        <option th:each="p : ${listProfession}" th:value="${p}" th:text="${p}"></option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row align-items-center">
+                <div class="col-2">
+                    <label for="humanCheck" class="col-form-label">Human?</label>
+                </div>
+                <div class="col-auto">
+                    <input class="form-check-input" type="checkbox" id="humanCheck" th:field="*{human}">
+                </div>
+            </div>
+            <div class="row d-grid m-3">
+                <input class="btn btn-success btn-lg" type="submit" value="Register"/>
+            </div>
+        </form>
     </div>
-    <form action="#" th:action="@{/register}" method="post" th:object="${user}">
-        <label>Full name:</label>
-        <input type="text" th:field="*{name}" />
-        <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}">name error</span><br/>
-
-        <label>E-mail:</label>
-        <input type="text" th:field="*{email}" />
-        <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}">email error</span><br/>
-
-        <label>Password:</label>
-        <input type="password" th:field="*{password}" />
-        <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}">password error</span><br/>
-
-        <label>Birthday:</label>
-        <input type="date" placeholder="MM/DD/YYYY" pattern="(^((0[1-9]|1[012]|[1-9])[- /.](0[1-9]|[12][0-9]|3[01]|
-        [1-9])[- /.](19|20)\d\d|(19|20)\d\d[- /.](0[1-9]|1[012]|[1-9])[- /.](0[1-9]|[12][0-9]|3[01]|[1-9]))$)" required
-               th:field="*{birthday}"/>
-
-        <span th:if="${#fields.hasErrors('birthday')}" th:errors="*{birthday}">birthday error</span><br/>
-
-        <label>Mood:</label>
-        <input type="radio" th:field="*{mood}" value="Happy" />Happy
-        <input type="radio" th:field="*{mood}" value="Sad" />Sad
-        <span th:if="${#fields.hasErrors('mood')}" th:errors="*{mood}">mood error</span><br/>
-
-
-        <label>Profession:</label>
-        <select th:field="*{profession}">
-            <option th:each="p : ${listProfession}" th:value="${p}" th:text="${p}"></option>
-        </select>
-        <br/>
-
-        <label>Human?</label>
-        <input type="checkbox" th:field="*{human}" /><br/>
-
-        <label>Note:</label>
-        <textarea rows="5" cols="25" th:field="*{note}"></textarea>
-        <br/>
-
-        <button type="submit">Register</button>
-    </form>
 </div>
+<div th:replace="fragments :: footer"/>
 </body>
 </html>

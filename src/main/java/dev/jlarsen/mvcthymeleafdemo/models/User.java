@@ -1,11 +1,9 @@
 package dev.jlarsen.mvcthymeleafdemo.models;
 
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.*;
+import java.util.Set;
 
 @Entity
 public class User {
@@ -25,8 +23,6 @@ public class User {
     //@Size(min = 8, max = 25, message="Must be between 8 and 25 characters.")
     private String password;
 
-    private String note;
-
     @NotBlank(message="Please choose a Mood.")
     private String mood;
 
@@ -36,6 +32,12 @@ public class User {
 
     @NotBlank(message = "Please choose a profession.")
     private String profession;
+
+    private boolean enabled;
+
+    @ManyToMany(cascade = CascadeType.MERGE)
+    //@JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles;
 
     public User() {
     }
@@ -66,14 +68,6 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getNote() {
-        return note;
-    }
-
-    public void setNote(String note) {
-        this.note = note;
     }
 
     public String getMood() {
@@ -108,6 +102,22 @@ public class User {
         this.profession = profession;
     }
 
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -115,7 +125,6 @@ public class User {
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", mood='" + mood + '\'' +
-                ", note='" + note + '\'' +
                 ", human=" + human +
                 ", birthday=" + birthday +
                 ", profession='" + profession + '\'' +

@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
     <title>All Users</title>
-    <link th:href="@{/css/main.css}" rel="stylesheet" />
+    <div th:replace="fragments :: header"/>
 </head>
 <body>
+<div th:replace="fragments :: navigation"/>
 <div id="form">
     <table>
         <tr>
@@ -26,5 +26,6 @@
         <button type="submit">Logout</button>
     </form>
 </div>
+<div th:replace="fragments :: footer"/>
 </body>
 </html>

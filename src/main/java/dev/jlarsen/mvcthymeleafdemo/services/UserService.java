@@ -1,7 +1,9 @@
 package dev.jlarsen.mvcthymeleafdemo.services;
 
 import dev.jlarsen.mvcthymeleafdemo.exceptions.UserExistsException;
+import dev.jlarsen.mvcthymeleafdemo.models.Role;
 import dev.jlarsen.mvcthymeleafdemo.models.User;
+import dev.jlarsen.mvcthymeleafdemo.repositories.RoleRepository;
 import dev.jlarsen.mvcthymeleafdemo.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -11,9 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class UserService {
@@ -22,13 +22,16 @@ public class UserService {
     UserRepository userRepository;
 
     @Autowired
+    RoleRepository roleRepository;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     public User getUser(String email) {
         if (emailExists(email)) {
             return userRepository.findByEmail(email);
         } else {
-            throw new UsernameNotFoundException("User Not Found");
+            throw new UsernameNotFoundException("User Not Found.");
         }
     }
 
@@ -44,11 +47,17 @@ public class UserService {
             throw new UserExistsException("There is an account with that email address:" + user.getEmail());
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        Role userRole = roleRepository.findByRole("USER");
+        user.setRoles(new HashSet<Role>(Collections.singletonList(userRole)));
         return userRepository.save(user);
     }
 
     private boolean emailExists(String email) {
-        return userRepository.findByEmail(email) != null;
+        if (userRepository.findByEmail(email) == null) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     public Model populateModel(Model model) {

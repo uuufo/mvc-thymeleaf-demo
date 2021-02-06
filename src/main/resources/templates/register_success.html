@@ -1,32 +1,69 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
     <title>Registration Success</title>
-    <link th:href="@{/css/main.css}" rel="stylesheet"/>
+    <link href="../static/css/bootstrap.css" rel="stylesheet" th:href="@{/css/bootstrap.css}"/>
+
+    <div th:replace="fragments :: header"/>
 </head>
 <body>
-<div id="form">
-    <h2>Registration Succeeded!</h2>
-    <span>Full name:</span><span th:text="${user.name}"></span><br/>
-    <span>E-mail:</span><span th:text="${user.email}"></span><br/>
-    <span>Password:</span><span th:text="${user.password}"></span><br/>
-    <span>Mood:</span><span th:text="${user.mood}"></span><br/>
-    <span>Profession:</span><span th:text="${user.profession}"></span><br/>
-    <span>Human?</span><span th:text="${user.human}"></span><br/>
-    <span>Note:</span><span th:text="${user.note}"></span><br/>
-
-    <form>
-        <button onclick="goBack()">Go Back</button>
-        <script>
-            function goBack() {
-                window.history.back();
-            }
-        </script>
-    </form>
-    <form action="#" th:action="@{/users}" method="get">
-        <button type="submit">View All Users</button>
-    </form>
+<div th:replace="fragments :: navigation"/>
+<div class="container">
+    <div class="bg-light p-5 rounded-lg m-3">
+        <h1>Registration Succeeded!</h1>
+        <div class="row">
+            <div class="col-1">
+                <span>Full name:</span>
+            </div>
+            <div class="col-auto">
+                <span class="text-danger" th:text="${user.name}"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-1">
+                <span>E-mail:</span>
+            </div>
+            <div class="col-auto">
+                <span class="text-danger" th:text="${user.email}"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-1">
+                <span>Password:</span>
+            </div>
+            <div class="col-auto">
+                <span class="text-danger" th:text="${user.password}"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-1">
+                <span>Mood:</span>
+            </div>
+            <div class="col-auto">
+                <span class="text-danger" th:text="${user.mood}"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-1">
+                <span>Profession:</span>
+            </div>
+            <div class="col-auto">
+                <span class="text-danger" th:text="${user.profession}"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-1">
+                <span>Human:</span>
+            </div>
+            <div class="col-auto">
+                <span class="text-danger" th:text="${user.human}"></span>
+            </div>
+        </div>
+        <div class="d-grid m-3">
+            <a class="btn btn-success btn-lg" href="/login" role="button">Login Now</a><br />
+        </div>
+    </div>
 </div>
+<div th:replace="fragments :: footer"/>
 </body>
 </html>
