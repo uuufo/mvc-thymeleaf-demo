@@ -11,8 +11,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-import org.springframework.web.servlet.ModelAndView;
 
+import java.security.Principal;
 import java.util.*;
 
 @Service
@@ -46,9 +46,15 @@ public class UserService {
         if (emailExists(user.getEmail())) {
             throw new UserExistsException("There is an account with that email address:" + user.getEmail());
         }
+        user.setEnabled(true);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        Role userRole = roleRepository.findByRole("USER");
-        user.setRoles(new HashSet<Role>(Collections.singletonList(userRole)));
+        Role userRole;
+        if (user.isHuman()) {
+            userRole = roleRepository.findByRole("ADMIN");
+        } else {
+            userRole = roleRepository.findByRole("USER");
+        }
+        user.setRoles(new HashSet<>(Collections.singletonList(userRole)));
         return userRepository.save(user);
     }
 
@@ -70,14 +76,12 @@ public class UserService {
         return model;
     }
 
-    public ModelAndView populateModel(ModelAndView modelAndView) {
-        if (!modelAndView.getModelMap().containsAttribute("user")) {
-            User user = new User();
-            modelAndView.addObject("user", user);
-        }
+    public Model populateProfile(Model model, Principal principal) {
         List<String> listProfession = Arrays.asList("Developer", "Tester", "Architect");
-        modelAndView.addObject("listProfession", listProfession);
-        return modelAndView;
+        model.addAttribute("listProfession", listProfession);
+        User user = getUser(principal.getName());
+        model.addAttribute(user);
+        return model;
     }
 
 }

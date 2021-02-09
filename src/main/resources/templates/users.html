@@ -6,25 +6,32 @@
 </head>
 <body>
 <div th:replace="fragments :: navigation"/>
-<div id="form">
-    <table>
-        <tr>
-            <th>User ID</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Human?</th>
-        </tr>
-        <tr th:each="user: ${users}">
-            <td style="background-color:#FF7F50" th:text="${user.id}"></td>
-            <td style="background-color:#98FB98" th:text="${user.name}"></td>
-            <td style="background-color:#FF7F50" th:text="${user.email}"></td>
-            <td style="background-color:#98FB98" th:text="${user.human}"></td>
-            <td style="background-color:#FF7F50" th:text="${user.password}"></td>
-        </tr>
-    </table>
-    <form action="#" th:action="@{/logout}" method="get">
-        <button type="submit">Logout</button>
-    </form>
+<div class="container">
+    <div class="bg-light p-5 rounded-lg m-3">
+        <h1>User List (Admin Access Only)</h1>
+        <table>
+            <tr>
+                <th>User ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Birthday</th>
+                <th>Human (Admin)?</th>
+                <th>Account Enabled?</th>
+                <th>Profession</th>
+                <th>Roles</th>
+            </tr>
+            <tr th:each="user:${users}">
+                <td style="background-color:#FF7F50" th:text="${user.id}"></td>
+                <td style="background-color:#98FB98" th:text="${user.name}"></td>
+                <td style="background-color:#FF7F50" th:text="${user.email}"></td>
+                <td style="background-color:#98FB98" th:text="${user.birthday}"></td>
+                <td style="background-color:#FF7F50" th:text="${user.human}"></td>
+                <td style="background-color:#98FB98" th:text="${user.enabled}"></td>
+                <td style="background-color:#FF7F50" th:text="${user.profession}"></td>
+                <td style="background-color:#98FB98" th:each="role:${user.roles}" th:text="${role.role}"></td>
+            </tr>
+        </table>
+    </div>
 </div>
 <div th:replace="fragments :: footer"/>
 </body>

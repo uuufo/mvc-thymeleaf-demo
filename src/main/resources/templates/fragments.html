@@ -8,6 +8,7 @@
         <meta name="author" content="Jared Larsen">
         <!--    <link rel="icon" href="../../favicon.ico" />-->
         <link href="../static/css/bootstrap.css" rel="stylesheet" th:href="@{/css/bootstrap.css}"/>
+        <link href="../static/css/main.css" rel="stylesheet" th:href="@{/css/main.css}"/>
     </div>
 </head>
 <body>
@@ -26,7 +27,7 @@
                         <a class="nav-link active" aria-current="page" href="/">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/users">Users</a>
+                        <a class="nav-link" href="/users">User List</a>
                     </li>
                 </ul>
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
@@ -37,9 +38,10 @@
                         <span class="text-info" sec:authentication="principal.authorities"></span>
                     </li>
                 </ul>
-                <form class="d-flex">
+                <form class="d-flex"  action="#" th:action="@{/logout}" method="post">
                     <div sec:authorize="isAuthenticated()">
-                        <a class="btn btn-outline-success" th:href="@{/logout}">Log out</a>
+                        <a class="btn btn-success" href="/profile" role="button">Profile</a>
+                        <input class="btn btn-outline-success" type="submit" value="Log out"/>
                     </div>
                     <div sec:authorize="isAnonymous()">
                         <a class="btn btn-outline-success" th:href="@{/login}">Log in</a>

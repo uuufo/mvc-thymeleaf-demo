@@ -8,9 +8,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.security.Principal;
 
 @Controller
 public class UserController {
@@ -23,27 +23,25 @@ public class UserController {
         return "login";
     }
 
-    @GetMapping("/register")
-    public String showForm(Model model) {
-        userService.populateModel(model);
-        return "register_form";
-    }
-
     @GetMapping("/users")
     public String getUsers(Model model) {
         model.addAttribute("users", userService.getUsers());
         return "users";
     }
 
-    @GetMapping("/test")
-    public ModelAndView test(ModelAndView modelAndView) {
-        userService.populateModel(modelAndView);
-        modelAndView.setViewName("register_form");
-        return modelAndView;
+    @GetMapping("/denied")
+    public String accessDenied() {
+        return "denied";
+    }
+
+    @GetMapping("/register")
+    public String showRegisterForm(Model model) {
+        userService.populateModel(model);
+        return "register_form";
     }
 
     @PostMapping("/register")
-    public String submitForm(@Valid @ModelAttribute("user") User user, BindingResult bindingResult, Model model) throws UserExistsException {
+    public String submitRegisterForm(@Valid @ModelAttribute("user") User user, BindingResult bindingResult, Model model) throws UserExistsException {
         if (bindingResult.hasErrors()) {
             userService.populateModel(model);
             return "register_form";
@@ -51,5 +49,11 @@ public class UserController {
             userService.registerNewUserAccount(user);
             return "register_success";
         }
+    }
+
+    @GetMapping("/profile")
+    public String showProfile(Model model, Principal principal) {
+        userService.populateProfile(model, principal);
+        return "profile";
     }
 }

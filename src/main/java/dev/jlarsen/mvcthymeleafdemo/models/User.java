@@ -1,6 +1,8 @@
 package dev.jlarsen.mvcthymeleafdemo.models;
 
 
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.util.Set;
@@ -9,7 +11,7 @@ import java.util.Set;
 public class User {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "user_generator")
     private Long id;
 
     @Size(min=5, max=40, message="Please enter First and Last name.")
@@ -36,7 +38,7 @@ public class User {
     private boolean enabled;
 
     @ManyToMany(cascade = CascadeType.MERGE)
-    //@JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
 
     public User() {

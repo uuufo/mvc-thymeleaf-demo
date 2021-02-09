@@ -11,13 +11,13 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect;
-import org.thymeleaf.spring5.SpringTemplateEngine;
-import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    MyAccessDeniedHandler myAccessDeniedHandler;
 
     @Autowired
     MyUserDetailsService myUserDetailsService;
@@ -29,11 +29,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-         http
-                 .authorizeRequests()
+        http
+                .authorizeRequests()
                 .antMatchers("/", "/home", "/about", "/css/**", "/register").permitAll()
-                .antMatchers("/admin/**").hasAnyRole("ADMIN")
-                .antMatchers("/user/**").hasAnyRole("USER")
+                .antMatchers("/users/**").hasAnyRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
@@ -41,22 +40,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .and()
                 .logout()
-                .permitAll();
-                //.and()
-                //.exceptionHandling().accessDeniedHandler(accessDeniedHandler);
+                .permitAll()
+                .and()
+                .exceptionHandling().accessDeniedHandler(myAccessDeniedHandler);
     }
-//        http
-//                .authorizeRequests()
-//                .antMatchers("/", "/index.html","/register", "/register_success", "/css/bootstrap.css").permitAll()
-//                .anyRequest().authenticated()
-//                .and()
-//                .formLogin()
-//                .loginPage("/login")
-//                .failureUrl("/login-error")
-//                .and()
-//                .logout()
-//                .logoutSuccessUrl("/");
-//    }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {

@@ -1,9 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Register New User</title>
-    <link href="../static/css/bootstrap.css" rel="stylesheet" th:href="@{/css/bootstrap.css}"/>
-
+    <title>User Profile</title>
     <div th:replace="fragments :: header"/>
 </head>
 <body>
@@ -12,9 +10,10 @@
 
     <div class="bg-light p-5 rounded-lg m-3">
         <div class="row mb-3">
-            <h1>User Registration</h1>
+            <h1>Update Profile</h1>
         </div>
-        <form class="col-10" action="#" th:action="@{/register}" method="post" th:object="${user}">
+
+        <form class="col-10" action="#" th:action="@{/profile}" method="post" th:object="${user}">
             <div class="row mb-2 align-items-center">
                 <div class="col-2">
                     <label for="inputName" class="col-form-label">Full Name:</label>
@@ -45,22 +44,7 @@
                 </div>
             </div>
 
-            <div class="row mb-2 align-items-center">
-                <div class="col-2">
-                    <label for="inputPassword" class="col-form-label">Password:</label>
-                </div>
-                <div class="col-auto">
-                    <input type="password" id="inputPassword" class="form-control" aria-describedby="passHelp"
-                           th:field="*{password}" required>
-                </div>
-                <div class="col-auto">
-<!--                    <span class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">-->
-<!--                        password error</span><br/>-->
-                    <span id="passHelp" class="form-text">Must be between 8 and 20 characters</span>
-                </div>
-            </div>
-
-            <div class="row mb-2 align-items-center">
+             <div class="row mb-2 align-items-center">
                 <div class="col-2">
                     <label for="inputBirthday" class="col-form-label">Birthday:</label>
                 </div>
@@ -101,14 +85,14 @@
                 <div class="col-2">
                     <label for="proList" class="col-form-label">Profession:</label>
                 </div>
-                <div class="col-2">
+                <div class="col-auto">
                     <select class="form-select" th:field="*{profession}" id="proList">
                         <option th:each="p : ${listProfession}" th:value="${p}" th:text="${p}"></option>
                     </select>
                 </div>
             </div>
 
-            <div class="row mb-2 align-items-center">
+            <div class="row mb-3 align-items-center">
                 <div class="col-2">
                     <label for="humanCheck" class="col-form-label">Human?</label>
                 </div>
@@ -116,8 +100,13 @@
                     <input class="form-check-input" type="checkbox" id="humanCheck" th:field="*{human}">
                 </div>
             </div>
-            <div class="row d-grid m-3">
-                <input class="btn btn-success btn-lg" type="submit" value="Register"/>
+            <div class="row">
+                <div class="col-auto">
+                    <input class="btn btn-success btn-lg" type="submit" value="Save Changes"/>
+                </div>
+                <div class="col-auto">
+                <input class="btn btn-outline-danger btn-lg" type="reset" value="Reset"/>
+                    </div>
             </div>
         </form>
     </div>
