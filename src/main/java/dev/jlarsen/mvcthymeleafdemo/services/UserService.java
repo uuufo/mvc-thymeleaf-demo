@@ -5,6 +5,7 @@ import dev.jlarsen.mvcthymeleafdemo.models.Role;
 import dev.jlarsen.mvcthymeleafdemo.models.User;
 import dev.jlarsen.mvcthymeleafdemo.repositories.RoleRepository;
 import dev.jlarsen.mvcthymeleafdemo.repositories.UserRepository;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -42,7 +43,7 @@ public class UserService {
 
     public User persistUser(User user) throws UserExistsException {
         if (emailExists(user.getEmail())) {
-            throw new UserExistsException("There is an account with that email address:" + user.getEmail());
+            throw new UserExistsException("An account already exists for this email: " + user.getEmail());
         }
         user.setEnabled(true);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -57,8 +58,14 @@ public class UserService {
     }
 
     @Transactional
-    public User updateUser(User user, Principal principal) {
+    public User updateUser(User user, Principal principal) throws UserExistsException {
         User updatedUser = userRepository.findByEmail(principal.getName());
+        if (!user.getEmail().equals(updatedUser.getEmail())) {
+            if (emailExists(user.getEmail())) {
+                throw new UserExistsException("An account already exists for this email: " + user.getEmail());
+            }
+        }
+        //BeanUtils.copyProperties(user, updatedUser);
         updatedUser.setName(user.getName());
         updatedUser.setEmail(user.getEmail());
         updatedUser.setBirthday((user.getBirthday()));
@@ -70,7 +77,4 @@ public class UserService {
     public boolean emailExists(String email) {
         return userRepository.findByEmail(email) != null;
     }
-
-
-
 }

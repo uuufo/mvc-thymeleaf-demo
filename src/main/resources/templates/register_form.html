@@ -24,9 +24,10 @@
                            th:field="*{name}" required>
                 </div>
                 <div class="col-auto">
-<!--                    <span class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">-->
-<!--                        name error</span><br/>-->
-                    <span id="nameHelp" class="form-text">First & Last</span>
+                    <div th:switch="${#fields.hasErrors('name')}">
+                        <span class="text-danger" th:case="true" th:errors="*{name}"></span>
+                        <span id="nameHelp" class="form-text" th:case="false">First & Last</span>
+                    </div>
                 </div>
             </div>
 
@@ -39,12 +40,12 @@
                            th:field="*{email}" required>
                 </div>
                 <div class="col-auto">
-<!--                    <span class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">-->
-<!--                        email error</span><br/>-->
-                    <span id="emailHelp" class="form-text">This will be your username</span>
+                    <div th:switch="${#fields.hasErrors('email')}">
+                        <span class="text-danger" th:case="true" th:errors="*{email}"></span>
+                        <span id="emailHelp" class="form-text" th:case="false">This will be your username</span>
+                    </div>
                 </div>
             </div>
-
             <div class="row mb-2 align-items-center">
                 <div class="col-2">
                     <label for="inputPassword" class="col-form-label">Password:</label>
@@ -54,12 +55,12 @@
                            th:field="*{password}" required>
                 </div>
                 <div class="col-auto">
-<!--                    <span class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">-->
-<!--                        password error</span><br/>-->
-                    <span id="passHelp" class="form-text">Must be between 8 and 20 characters</span>
+                    <div th:switch="${#fields.hasErrors('password')}">
+                        <span class="text-danger" th:case="true" th:errors="*{password}"></span>
+                        <span id="passHelp" class="form-text" th:case="false">Must be between 8 and 25 characters</span>
+                    </div>
                 </div>
             </div>
-
             <div class="row mb-2 align-items-center">
                 <div class="col-2">
                     <label for="inputBirthday" class="col-form-label">Birthday:</label>
@@ -71,12 +72,12 @@
                                             (0[1-9]|[12][0-9]|3[01]|[1-9]))$)" required th:field="*{birthday}">
                 </div>
                 <div class="col-auto">
-<!--                    <span class="text-danger" th:if="${#fields.hasErrors('birthday')}" th:errors="*{birthday}">-->
-<!--                        birthday error</span><br/>-->
-                    <span id="bdHelp" class="form-text">Please lie about it</span>
+                    <div th:switch="${#fields.hasErrors('birthday')}">
+                        <span class="text-danger" th:case="true" th:errors="*{birthday}"></span>
+                        <span id="bdHelp" class="form-text" th:case="false">Please lie about it</span>
+                    </div>
                 </div>
             </div>
-
             <div class="row mb-2 align-items-center">
                 <div class="col-2">
                     <label for="happyRadio" class="col-form-label">Mood:</label>

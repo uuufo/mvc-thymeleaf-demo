@@ -41,30 +41,43 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public String submitRegisterForm(@Valid @ModelAttribute("user") UserDto user, BindingResult bindingResult, Model model) throws UserExistsException {
+    public String submitRegisterForm(@Valid @ModelAttribute("user") UserDto user, BindingResult bindingResult,
+                                     Model model) {
         if (bindingResult.hasErrors()) {
             userFacade.populateModel(model);
             return "register_form";
         } else {
-            userFacade.registerNewUserAccount(user);
+            try {
+                userFacade.registerNewUserAccount(user);
+            } catch (UserExistsException e) {
+                bindingResult.rejectValue("email", "user.email", e.getMessage());
+                userFacade.populateModel(model);
+                return "register_form";
+            }
             return "register_success";
         }
     }
 
     @GetMapping("/profile")
-    public String showProfile(Model model, Principal principal) {
+    public String showProfile(UserDto user, Model model, Principal principal) {
         userFacade.populateProfile(model, principal);
         return "profile";
     }
 
     @PostMapping("/profile")
-    public String submitProfileForm(@Valid @ModelAttribute("user") UserDto user, BindingResult bindingResult, Model model, Principal principal) {
-        System.out.println("test");
+    public String submitProfileForm(@Valid @ModelAttribute("user") UserDto user, BindingResult bindingResult,
+                                    Model model, Principal principal) {
         if (bindingResult.hasErrors()) {
             userFacade.populateProfile(model, principal);
             return "profile";
         } else {
-            userFacade.updateUserAccountProfile(user, principal);
+            try {
+                userFacade.updateUserAccountProfile(user, principal);
+            } catch (UserExistsException e) {
+                userFacade.populateProfile(model, principal);
+                bindingResult.rejectValue("email", "user.email", e.getMessage());
+                return "profile";
+            }
             return "profile_success";
         }
     }

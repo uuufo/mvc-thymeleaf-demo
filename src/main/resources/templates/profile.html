@@ -22,12 +22,12 @@
                            th:field="*{name}" required>
                 </div>
                 <div class="col-auto">
-<!--                    <span class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">-->
-<!--                        name error</span><br/>-->
-                    <span id="nameHelp" class="form-text">First & Last</span>
+                    <div th:switch="${#fields.hasErrors('name')}">
+                        <span class="text-danger" th:case="true" th:errors="*{name}"></span>
+                        <span id="nameHelp" class="form-text" th:case="false">First & Last</span>
+                    </div>
                 </div>
             </div>
-
             <div class="row mb-2 align-items-center">
                 <div class="col-2">
                     <label for="inputEmail" class="col-form-label">Email Address:</label>
@@ -37,13 +37,13 @@
                            th:field="*{email}" required>
                 </div>
                 <div class="col-auto">
-<!--                    <span class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">-->
-<!--                        email error</span><br/>-->
-                    <span id="emailHelp" class="form-text">This is your username</span>
+                    <div th:switch="${#fields.hasErrors('email')}">
+                        <span class="text-danger" th:case="true" th:errors="*{email}"></span>
+                        <span id="emailHelp" class="form-text" th:case="false">This is your username</span>
+                    </div>
                 </div>
             </div>
-
-             <div class="row mb-2 align-items-center">
+            <div class="row mb-2 align-items-center">
                 <div class="col-2">
                     <label for="inputBirthday" class="col-form-label">Birthday:</label>
                 </div>
@@ -54,9 +54,10 @@
                                             (0[1-9]|[12][0-9]|3[01]|[1-9]))$)" required th:field="*{birthday}">
                 </div>
                 <div class="col-auto">
-<!--                    <span class="text-danger" th:if="${#fields.hasErrors('birthday')}" th:errors="*{birthday}">-->
-<!--                        birthday error</span><br/>-->
-                    <span id="bdHelp" class="form-text">Please lie about it</span>
+                    <div th:switch="${#fields.hasErrors('birthday')}">
+                        <span class="text-danger" th:case="true" th:errors="*{birthday}"></span>
+                        <span id="bdHelp" class="form-text" th:case="false">Please lie about it</span>
+                    </div>
                 </div>
             </div>
 
@@ -95,8 +96,8 @@
                     <input class="btn btn-success btn-lg" type="submit" value="Save Changes"/>
                 </div>
                 <div class="col-auto">
-                <input class="btn btn-outline-danger btn-lg" type="reset" value="Reset"/>
-                    </div>
+                    <input class="btn btn-outline-danger btn-lg" type="reset" value="Reset"/>
+                </div>
             </div>
         </form>
     </div>

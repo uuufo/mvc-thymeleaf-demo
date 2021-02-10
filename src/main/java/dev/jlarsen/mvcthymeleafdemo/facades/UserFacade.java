@@ -4,6 +4,7 @@ import dev.jlarsen.mvcthymeleafdemo.exceptions.UserExistsException;
 import dev.jlarsen.mvcthymeleafdemo.models.User;
 import dev.jlarsen.mvcthymeleafdemo.models.UserDto;
 import dev.jlarsen.mvcthymeleafdemo.services.UserService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +26,7 @@ public class UserFacade {
     }
 
     @Transactional
-    public User updateUserAccountProfile(UserDto userDto, Principal principal) {
+    public User updateUserAccountProfile(UserDto userDto, Principal principal) throws UserExistsException {
         User user = convertDtoToUser(userDto);
         return userService.updateUser(user, principal);
     }
@@ -68,14 +69,21 @@ public class UserFacade {
             User user = new User();
             model.addAttribute("user", user);
         }
-        List<String> listProfession = Arrays.asList("Developer", "Tester", "Architect");
-        model.addAttribute("listProfession", listProfession);
+        populateProfessionList(model);
     }
 
     public void populateProfile(Model model, Principal principal) {
+        UserDto currentUser = convertUserToDto(userService.getUser(principal.getName()));
+        if (!model.containsAttribute("user")) {
+            model.addAttribute("user", currentUser);
+        } else {
+            BeanUtils.copyProperties(currentUser, model.getAttribute("user"));
+        }
+        populateProfessionList(model);
+    }
+
+    public void populateProfessionList(Model model) {
         List<String> listProfession = Arrays.asList("Developer", "Tester", "Architect");
         model.addAttribute("listProfession", listProfession);
-        UserDto userDto = convertUserToDto(userService.getUser(principal.getName()));
-        model.addAttribute("user", userDto);
     }
 }
