@@ -1,46 +1,37 @@
 package dev.jlarsen.mvcthymeleafdemo.models;
 
-
-import org.hibernate.annotations.GenericGenerator;
-
-import javax.persistence.*;
-import javax.validation.constraints.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.Set;
 
-@Entity
-public class User {
+public class UserDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "user_generator")
-    private Long id;
-
+    @Size(min=5, max=40, message="Please enter First and Last name.")
     private String name;
 
-    @Column(unique = true)
+    @NotBlank(message = "Please enter a valid e-mail address.")
+    @Email(message = "Please enter a valid e-mail address.")
     private String email;
 
-    @Column(length = 60)
+    @Size(min = 8, max = 25, message="Must be between 8 and 25 characters.")
     private String password;
 
+    @NotBlank(message="Please choose a Mood.")
     private String mood;
-
-    private boolean human;
 
     private String birthday;
 
-    private String profession;
+    private boolean human;
 
     private boolean enabled;
 
-    @ManyToMany(cascade = CascadeType.MERGE)
-    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @NotBlank(message = "Please choose a profession.")
+    private String profession;
+
     private Set<Role> roles;
 
-    public User() {
-    }
-
-    public Long getId() {
-        return id;
+    public UserDto() {
     }
 
     public String getName() {
@@ -67,6 +58,14 @@ public class User {
         this.password = password;
     }
 
+    public boolean isHuman() {
+        return human;
+    }
+
+    public void setHuman(boolean human) {
+        this.human = human;
+    }
+
     public String getMood() {
         return mood;
     }
@@ -75,12 +74,12 @@ public class User {
         this.mood = mood;
     }
 
-    public boolean isHuman() {
-        return human;
+    public boolean isEnabled() {
+        return enabled;
     }
 
-    public void setHuman(boolean human) {
-        this.human = human;
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
     public String getBirthday() {
@@ -107,23 +106,13 @@ public class User {
         this.roles = roles;
     }
 
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
     @Override
     public String toString() {
-        return "User{" +
+        return "UserDTO{" +
                 "name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", mood='" + mood + '\'' +
-                ", human=" + human +
-                ", birthday=" + birthday +
                 ", profession='" + profession + '\'' +
                 '}';
     }

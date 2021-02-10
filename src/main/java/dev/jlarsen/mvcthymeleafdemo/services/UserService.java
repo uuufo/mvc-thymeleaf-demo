@@ -6,11 +6,9 @@ import dev.jlarsen.mvcthymeleafdemo.models.User;
 import dev.jlarsen.mvcthymeleafdemo.repositories.RoleRepository;
 import dev.jlarsen.mvcthymeleafdemo.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.Model;
 
 import java.security.Principal;
 import java.util.*;
@@ -28,11 +26,12 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
 
     public User getUser(String email) {
-        if (emailExists(email)) {
-            return userRepository.findByEmail(email);
-        } else {
-            throw new UsernameNotFoundException("User Not Found.");
-        }
+        return userRepository.findByEmail(email);
+//        if (emailExists(email)) {
+//            return userRepository.findByEmail(email);
+//        } else {
+//            throw new UsernameNotFoundException("User Not Found.");
+//        }
     }
 
     public List<User> getUsers() {
@@ -41,8 +40,7 @@ public class UserService {
         return users;
     }
 
-    @Transactional
-    public User registerNewUserAccount(User user) throws UserExistsException {
+    public User persistUser(User user) throws UserExistsException {
         if (emailExists(user.getEmail())) {
             throw new UserExistsException("There is an account with that email address:" + user.getEmail());
         }
@@ -58,30 +56,21 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    private boolean emailExists(String email) {
-        if (userRepository.findByEmail(email) == null) {
-            return false;
-        } else {
-            return true;
-        }
+    @Transactional
+    public User updateUser(User user, Principal principal) {
+        User updatedUser = userRepository.findByEmail(principal.getName());
+        updatedUser.setName(user.getName());
+        updatedUser.setEmail(user.getEmail());
+        updatedUser.setBirthday((user.getBirthday()));
+        updatedUser.setMood(user.getMood());
+        updatedUser.setProfession(user.getProfession());
+        return userRepository.save(updatedUser);
     }
 
-    public Model populateModel(Model model) {
-        if (!model.containsAttribute("user")) {
-            User user = new User();
-            model.addAttribute("user", user);
-        }
-        List<String> listProfession = Arrays.asList("Developer", "Tester", "Architect");
-        model.addAttribute("listProfession", listProfession);
-        return model;
+    public boolean emailExists(String email) {
+        return userRepository.findByEmail(email) != null;
     }
 
-    public Model populateProfile(Model model, Principal principal) {
-        List<String> listProfession = Arrays.asList("Developer", "Tester", "Architect");
-        model.addAttribute("listProfession", listProfession);
-        User user = getUser(principal.getName());
-        model.addAttribute(user);
-        return model;
-    }
+
 
 }
