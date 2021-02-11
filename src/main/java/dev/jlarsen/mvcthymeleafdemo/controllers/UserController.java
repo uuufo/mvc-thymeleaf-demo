@@ -2,6 +2,7 @@ package dev.jlarsen.mvcthymeleafdemo.controllers;
 
 import dev.jlarsen.mvcthymeleafdemo.exceptions.UserExistsException;
 import dev.jlarsen.mvcthymeleafdemo.facades.UserFacade;
+import dev.jlarsen.mvcthymeleafdemo.models.User;
 import dev.jlarsen.mvcthymeleafdemo.models.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -59,7 +60,7 @@ public class UserController {
     }
 
     @GetMapping("/profile")
-    public String showProfile(UserDto user, Model model, Principal principal) {
+    public String showProfile(Model model, Principal principal) {
         userFacade.populateProfile(model, principal);
         return "profile";
     }
